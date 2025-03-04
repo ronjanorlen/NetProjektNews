@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NetProjektNews.Data;
 using NetProjektNews.Models;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 
 namespace NetProjektNews.Controllers
 {
@@ -75,7 +77,6 @@ namespace NetProjektNews.Controllers
 
                     article.ImageName = fileName = fileName.Replace(" ", String.Empty) + DateTime.Now.ToString("yymmssfff") + extension; // Ta bort mellanslag om det finns och lägg till datum + filändelse 
 
-
                     string path = Path.Combine(wwwRootPath + "/images", fileName);
 
                     // Spara i filsystem 
@@ -83,6 +84,10 @@ namespace NetProjektNews.Controllers
                     {
                         await article.ImageFile.CopyToAsync(fileStream);
                     }
+
+                    // Skapa minityr-bild 
+                    CreateImageFiles(fileName);
+
                 }
                 else
                 {
@@ -187,6 +192,17 @@ namespace NetProjektNews.Controllers
         private bool ArticleExists(int id)
         {
             return _context.Articles.Any(e => e.Id == id);
+        }
+
+        private void CreateImageFiles(string fileName) {
+            string imagePath = wwwRootPath + "/images/";
+
+            // Skapa miniatyr 
+            using var image = Image.Load(imagePath + fileName);
+            // Gör bilden hälften så stor som original 
+            image.Mutate(x => x.Resize(image.Width /2, image.Height / 2));
+            // Spara bild med "thumb" i namnet 
+            image.Save(imagePath + "thumb_" + fileName);
         }
     }
 }
