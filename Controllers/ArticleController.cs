@@ -30,6 +30,12 @@ namespace NetProjektNews.Controllers
         // GET: Article
         public async Task<IActionResult> Index()
         {
+            // Kontrollera om context är null 
+            if (_context.Articles == null) {
+
+                return NotFound();
+            }
+
             var applicationDbContext = _context.Articles.Include(a => a.Category);
             return View(await applicationDbContext.ToListAsync());
         }
@@ -39,6 +45,12 @@ namespace NetProjektNews.Controllers
         {
             if (id == null)
             {
+                return NotFound();
+            }
+
+            // Kontrollera om context är null 
+            if (_context.Articles == null) {
+
                 return NotFound();
             }
             
@@ -119,6 +131,12 @@ namespace NetProjektNews.Controllers
                 return NotFound();
             }
 
+            // Kontrollera om context är null 
+            if (_context.Articles == null) {
+
+                return NotFound();
+            }
+
             var article = await _context.Articles.FindAsync(id);
             if (article == null)
             {
@@ -174,6 +192,12 @@ namespace NetProjektNews.Controllers
                 return NotFound();
             }
 
+            // Kontrollera om context är null 
+            if (_context.Articles == null) {
+
+                return NotFound();
+            }
+
             var article = await _context.Articles
                 .Include(a => a.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -191,6 +215,12 @@ namespace NetProjektNews.Controllers
         [Authorize] // Skyddad - måste vara inloggad för åtkomst
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            // Kontrollera om context är null 
+            if (_context.Articles == null) {
+
+                return NotFound();
+            }
+
             var article = await _context.Articles.FindAsync(id);
             if (article != null)
             {
@@ -203,6 +233,11 @@ namespace NetProjektNews.Controllers
 
         private bool ArticleExists(int id)
         {
+            // Kontrollera om context är null 
+            if (_context.Articles == null) {
+
+                return false;
+            }
             return _context.Articles.Any(e => e.Id == id);
         }
 

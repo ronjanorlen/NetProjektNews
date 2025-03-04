@@ -24,6 +24,13 @@ namespace NetProjektNews.Controllers
         // GET: Category
         public async Task<IActionResult> Index()
         {
+            // Kontrollera om context är null 
+            if (_context.Categories == null)
+            {
+
+                return NotFound();
+            }
+
             return View(await _context.Categories.ToListAsync());
         }
 
@@ -32,6 +39,13 @@ namespace NetProjektNews.Controllers
         {
             if (id == null)
             {
+                return NotFound();
+            }
+
+            // Kontrollera om context är null 
+            if (_context.Categories == null)
+            {
+
                 return NotFound();
             }
 
@@ -72,6 +86,13 @@ namespace NetProjektNews.Controllers
         {
             if (id == null)
             {
+                return NotFound();
+            }
+
+            // Kontrollera om context är null 
+            if (_context.Categories == null)
+            {
+
                 return NotFound();
             }
 
@@ -126,6 +147,13 @@ namespace NetProjektNews.Controllers
                 return NotFound();
             }
 
+            // Kontrollera om context är null 
+            if (_context.Categories == null)
+            {
+
+                return NotFound();
+            }
+
             var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
@@ -153,6 +181,13 @@ namespace NetProjektNews.Controllers
 
         private bool CategoryExists(int id)
         {
+            // Kontrollera om context är null 
+            if (_context.Categories == null)
+            {
+
+                return false;
+            }
+
             return _context.Categories.Any(e => e.Id == id);
         }
     }
