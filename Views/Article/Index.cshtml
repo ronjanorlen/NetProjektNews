@@ -54,7 +54,7 @@
                 </a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                @(item.Category?.CategoryName ?? "Inte valt" )
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
