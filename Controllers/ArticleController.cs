@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +41,7 @@ namespace NetProjektNews.Controllers
             {
                 return NotFound();
             }
+            
 
             var article = await _context.Articles
                 .Include(a => a.Category)
@@ -53,6 +55,7 @@ namespace NetProjektNews.Controllers
         }
 
         // GET: Article/Create
+        [Authorize] // Skyddad - måste vara inloggad för åtkomst
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName");
@@ -62,9 +65,10 @@ namespace NetProjektNews.Controllers
         // POST: Article/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize] // Skyddad - måste vara inloggad för åtkomst
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Content,CreatedBy,CreatedAt,ImageFile,CategoryId")] Article article)
+        public async Task<IActionResult> Create([Bind("Id,Title,Content,CreatedAt,ImageFile,CategoryId")] Article article)
         {
             if (ModelState.IsValid)
             {
@@ -95,6 +99,10 @@ namespace NetProjektNews.Controllers
                 }
 
                 _context.Add(article);
+
+                // Lägg till inloggad användare till createdBy
+                    article.CreatedBy = User.Identity?.Name ?? "Unknown";
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -103,6 +111,7 @@ namespace NetProjektNews.Controllers
         }
 
         // GET: Article/Edit/5
+        [Authorize] // Skyddad - måste vara inloggad för åtkomst
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -122,9 +131,10 @@ namespace NetProjektNews.Controllers
         // POST: Article/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize] // Skyddad - måste vara inloggad för åtkomst
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,CreatedBy,CreatedAt,ImageName,CategoryId")] Article article)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,CreatedAt,ImageName,CategoryId")] Article article)
         {
             if (id != article.Id)
             {
@@ -156,6 +166,7 @@ namespace NetProjektNews.Controllers
         }
 
         // GET: Article/Delete/5
+        [Authorize] // Skyddad - måste vara inloggad för åtkomst
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -177,6 +188,7 @@ namespace NetProjektNews.Controllers
         // POST: Article/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize] // Skyddad - måste vara inloggad för åtkomst
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var article = await _context.Articles.FindAsync(id);
