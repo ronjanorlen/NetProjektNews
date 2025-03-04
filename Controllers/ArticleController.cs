@@ -13,10 +13,15 @@ namespace NetProjektNews.Controllers
     public class ArticleController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _hostEnvironment; // Läs ut sökvägar till filsystem
 
-        public ArticleController(ApplicationDbContext context)
+        private readonly string wwwRootPath; // Sökväg till wwwroot
+
+        public ArticleController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
+            wwwRootPath = hostEnvironment.WebRootPath;
         }
 
         // GET: Article
@@ -57,10 +62,33 @@ namespace NetProjektNews.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Content,CreatedBy,CreatedAt,ImageName,CategoryId")] Article article)
+        public async Task<IActionResult> Create([Bind("Id,Title,Content,CreatedBy,CreatedAt,ImageFile,CategoryId")] Article article)
         {
             if (ModelState.IsValid)
             {
+                // Kontrollera om det finns bild 
+                if (article.ImageFile != null)
+                {
+                    // Generera unikt filnamn 
+                    string fileName = Path.GetFileNameWithoutExtension(article.ImageFile.FileName);
+                    string extension = Path.GetExtension(article.ImageFile.FileName); //Filändelse
+
+                    article.ImageName = fileName = fileName.Replace(" ", String.Empty) + DateTime.Now.ToString("yymmssfff") + extension; // Ta bort mellanslag om det finns och lägg till datum + filändelse 
+
+
+                    string path = Path.Combine(wwwRootPath + "/images", fileName);
+
+                    // Spara i filsystem 
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        await article.ImageFile.CopyToAsync(fileStream);
+                    }
+                }
+                else
+                {
+                    article.ImageName = "placeholder.jpg"; // Om det inte finns någon bild, använd placeholder-bild 
+                }
+
                 _context.Add(article);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

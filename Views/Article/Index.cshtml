@@ -49,7 +49,9 @@
                 @Html.DisplayFor(modelItem => item.CreatedAt)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImageName)
+                <a href="images/@Html.DisplayFor(modelItem => item.ImageName)">
+                <img src="images/@Html.DisplayFor(modelItem => item.ImageName)" alt="Bild">
+                </a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Category.CategoryName)

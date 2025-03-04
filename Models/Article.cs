@@ -1,5 +1,5 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema; // Inkludera DataAnnotations
+using System.ComponentModel.DataAnnotations; // Inkludera DataAnnotations
+using System.ComponentModel.DataAnnotations.Schema; 
 
 namespace NetProjektNews.Models {
       public class Article {
