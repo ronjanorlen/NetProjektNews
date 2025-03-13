@@ -37,7 +37,10 @@ namespace NetProjektNews.Controllers
                 return NotFound();
             }
 
-            var applicationDbContext = _context.Articles.Include(a => a.Category);
+            // Visa nyheter med nyaste överst
+            var applicationDbContext = _context.Articles
+            .Include(a => a.Category)
+            .OrderByDescending(a => a.CreatedAt);
             return View(await applicationDbContext.ToListAsync());
         }
 

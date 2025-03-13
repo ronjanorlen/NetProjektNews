@@ -11,7 +11,7 @@
 @if (SignInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Editor")))
 {
 <p>
-    <a asp-action="Create">Skapa nyhet</a>
+    <a asp-action="Create"><i class="bi bi-plus-circle"></i> Skapa nytt inlägg</a>
 </p>
 }
 
@@ -20,26 +20,27 @@
 {
     <section class="news-article">
         <h2>@item.Title</h2>
-        <p><strong>Publicerad av:</strong> @item.CreatedBy</p>
-        <p><strong>Datum:</strong> @item.CreatedAt.ToString("yyyy-MM-dd")</p>
-        <p>@item.Content</p>
+        
+         @if (SignInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Editor")))
+    { // Visa bara om editor eller admin är inloggad 
+        <p>
+            <a asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i> Redigera</a> 
+            <a asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-info-circle"></i> Detaljer</a> 
+            <a asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i> Ta bort</a>
+        </p>
+        }
+
+        
+        <p><em>@item.CreatedAt.ToString("yyyy-MM-dd")</em></p>
+        <p><strong>Kategori:</strong> @(item.Category?.CategoryName ?? "Inte valt")</p>
         
         @if (!string.IsNullOrEmpty(item.ImageName))
         {
             <a href="images/@item.ImageName">
-                <img src="images/thumb_@item.ImageName" alt="Bild på @item.Title">
+                <img src="images/thumb_@item.ImageName" alt="Bild">
             </a>
         }
 
-        <p><strong>Kategori:</strong> @(item.Category?.CategoryName ?? "Inte valt")</p>
-
-    @if (SignInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Editor")))
-    { // Visa bara om editor eller admin är inloggad 
-        <p>
-            <a asp-action="Edit" asp-route-id="@item.Id">Redigera</a> |
-            <a asp-action="Details" asp-route-id="@item.Id">Detaljer</a> |
-            <a asp-action="Delete" asp-route-id="@item.Id">Ta bort</a>
-        </p>
-        }
+        <p class="contentText">@item.Content</p>
     </section>
 }
