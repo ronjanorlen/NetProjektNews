@@ -31,7 +31,8 @@ namespace NetProjektNews.Controllers
         public async Task<IActionResult> Index()
         {
             // Kontrollera om context är null 
-            if (_context.Articles == null) {
+            if (_context.Articles == null)
+            {
 
                 return NotFound();
             }
@@ -41,6 +42,7 @@ namespace NetProjektNews.Controllers
         }
 
         // GET: Article/Details/5
+        [Authorize(Roles = "Admin, Editor")] // Admin och editor har tillgång
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -49,11 +51,12 @@ namespace NetProjektNews.Controllers
             }
 
             // Kontrollera om context är null 
-            if (_context.Articles == null) {
+            if (_context.Articles == null)
+            {
 
                 return NotFound();
             }
-            
+
 
             var article = await _context.Articles
                 .Include(a => a.Category)
@@ -67,7 +70,7 @@ namespace NetProjektNews.Controllers
         }
 
         // GET: Article/Create
-        [Authorize] // Skyddad - måste vara inloggad för åtkomst
+        [Authorize(Roles = "Admin, Editor")] // Admin och editor har tillgång
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "CategoryName");
@@ -77,9 +80,9 @@ namespace NetProjektNews.Controllers
         // POST: Article/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize] // Skyddad - måste vara inloggad för åtkomst
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Editor")] // Admin och editor har tillgång
         public async Task<IActionResult> Create([Bind("Id,Title,Content,CreatedAt,ImageFile,CategoryId")] Article article)
         {
             if (ModelState.IsValid)
@@ -113,7 +116,7 @@ namespace NetProjektNews.Controllers
                 _context.Add(article);
 
                 // Lägg till inloggad användare till createdBy
-                    article.CreatedBy = User.Identity?.Name ?? "Unknown";
+                article.CreatedBy = User.Identity?.Name ?? "Unknown";
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -123,7 +126,7 @@ namespace NetProjektNews.Controllers
         }
 
         // GET: Article/Edit/5
-        [Authorize] // Skyddad - måste vara inloggad för åtkomst
+        [Authorize(Roles = "Admin, Editor")] // Admin och editor har tillgång
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -132,7 +135,8 @@ namespace NetProjektNews.Controllers
             }
 
             // Kontrollera om context är null 
-            if (_context.Articles == null) {
+            if (_context.Articles == null)
+            {
 
                 return NotFound();
             }
@@ -149,9 +153,9 @@ namespace NetProjektNews.Controllers
         // POST: Article/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize] // Skyddad - måste vara inloggad för åtkomst
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Editor")] // Admin och editor har tillgång
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,CreatedAt,ImageName,CategoryId")] Article article)
         {
             if (id != article.Id)
@@ -184,7 +188,7 @@ namespace NetProjektNews.Controllers
         }
 
         // GET: Article/Delete/5
-        [Authorize] // Skyddad - måste vara inloggad för åtkomst
+        [Authorize(Roles = "Admin, Editor")] // Admin och editor har tillgång
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -193,7 +197,8 @@ namespace NetProjektNews.Controllers
             }
 
             // Kontrollera om context är null 
-            if (_context.Articles == null) {
+            if (_context.Articles == null)
+            {
 
                 return NotFound();
             }
@@ -212,11 +217,12 @@ namespace NetProjektNews.Controllers
         // POST: Article/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize] // Skyddad - måste vara inloggad för åtkomst
+        [Authorize(Roles = "Admin, Editor")] // Admin och editor har tillgång
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             // Kontrollera om context är null 
-            if (_context.Articles == null) {
+            if (_context.Articles == null)
+            {
 
                 return NotFound();
             }
@@ -234,20 +240,22 @@ namespace NetProjektNews.Controllers
         private bool ArticleExists(int id)
         {
             // Kontrollera om context är null 
-            if (_context.Articles == null) {
+            if (_context.Articles == null)
+            {
 
                 return false;
             }
             return _context.Articles.Any(e => e.Id == id);
         }
 
-        private void CreateImageFiles(string fileName) {
+        private void CreateImageFiles(string fileName)
+        {
             string imagePath = wwwRootPath + "/images/";
 
             // Skapa miniatyr 
             using var image = Image.Load(imagePath + fileName);
             // Gör bilden hälften så stor som original 
-            image.Mutate(x => x.Resize(image.Width /2, image.Height / 2));
+            image.Mutate(x => x.Resize(image.Width / 2, image.Height / 2));
             // Spara bild med "thumb" i namnet 
             image.Save(imagePath + "thumb_" + fileName);
         }

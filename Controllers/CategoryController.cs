@@ -9,9 +9,10 @@ using Microsoft.EntityFrameworkCore;
 using NetProjektNews.Data;
 using NetProjektNews.Models;
 
+
 namespace NetProjektNews.Controllers
 {
-    [Authorize] // Skyddad - måste vara inloggad för åtkomst
+    [Authorize(Roles = "Admin, editor")] // Skyddad - måste vara inloggad för åtkomst
     public class CategoryController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,6 +23,7 @@ namespace NetProjektNews.Controllers
         }
 
         // GET: Category
+        [Authorize(Roles = "Admin, Editor")] // Admin och editor har tillgång
         public async Task<IActionResult> Index()
         {
             // Kontrollera om context är null 
@@ -35,6 +37,7 @@ namespace NetProjektNews.Controllers
         }
 
         // GET: Category/Details/5
+        [Authorize(Roles = "Admin, Editor")] // // Admin och editor har tillgång
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -60,6 +63,7 @@ namespace NetProjektNews.Controllers
         }
 
         // GET: Category/Create
+        [Authorize(Roles = "Admin, Editor")] // Bara admin och editor har tillgång
         public IActionResult Create()
         {
             return View();
@@ -70,6 +74,7 @@ namespace NetProjektNews.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Editor")] // Bara admin och editor har tillgång
         public async Task<IActionResult> Create([Bind("Id,CategoryName")] Category category)
         {
             if (ModelState.IsValid)
@@ -82,6 +87,7 @@ namespace NetProjektNews.Controllers
         }
 
         // GET: Category/Edit/5
+        [Authorize(Roles = "Admin, Editor")] // Bara admin och editor har tillgång
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -109,6 +115,7 @@ namespace NetProjektNews.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Editor")] // Bara admin och editor har tillgång
         public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryName")] Category category)
         {
             if (id != category.Id)
@@ -140,6 +147,7 @@ namespace NetProjektNews.Controllers
         }
 
         // GET: Category/Delete/5
+        [Authorize(Roles = "Admin")] // Bara admin har tillgång
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -167,6 +175,7 @@ namespace NetProjektNews.Controllers
         // POST: Category/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")] // Bara admin har tillgång
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var category = await _context.Categories.FindAsync(id);

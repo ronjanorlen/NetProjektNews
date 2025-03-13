@@ -1,67 +1,45 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 @model IEnumerable<NetProjektNews.Models.Article>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Nyheter";
 }
 
-<h1>Index</h1>
-
+<h1>Senaste nytt</h1>
+@if (SignInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Editor")))
+{
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Skapa nyhet</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Content)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ImageName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Content)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedAt)
-            </td>
-            <td>
-                <a href="images/@Html.DisplayFor(modelItem => item.ImageName)">
-                <img src="images/thumb_@Html.DisplayFor(modelItem => item.ImageName)" alt="Bild">
-                </a>
-            </td>
-            <td>
-                @(item.Category?.CategoryName ?? "Inte valt" )
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
 }
-    </tbody>
-</table>
+
+
+@foreach (var item in Model)
+{
+    <section class="news-article">
+        <h2>@item.Title</h2>
+        <p><strong>Publicerad av:</strong> @item.CreatedBy</p>
+        <p><strong>Datum:</strong> @item.CreatedAt.ToString("yyyy-MM-dd")</p>
+        <p>@item.Content</p>
+        
+        @if (!string.IsNullOrEmpty(item.ImageName))
+        {
+            <a href="images/@item.ImageName">
+                <img src="images/thumb_@item.ImageName" alt="Bild på @item.Title">
+            </a>
+        }
+
+        <p><strong>Kategori:</strong> @(item.Category?.CategoryName ?? "Inte valt")</p>
+
+    @if (SignInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Editor")))
+    { // Visa bara om editor eller admin är inloggad 
+        <p>
+            <a asp-action="Edit" asp-route-id="@item.Id">Redigera</a> |
+            <a asp-action="Details" asp-route-id="@item.Id">Detaljer</a> |
+            <a asp-action="Delete" asp-route-id="@item.Id">Ta bort</a>
+        </p>
+        }
+    </section>
+}
