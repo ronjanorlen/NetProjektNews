@@ -5,10 +5,12 @@
 }
 
 
-<div class="row">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+<div class="row justify-content-center mt-4">
+    <div class="col-12">
+        <section class="loginForm">
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
             <h2>Bli medlem</h2>
+            <p>Vad kul att du vill bli medlem i Titz N Trix! <i class="bi bi-arrow-through-heart"></i></p>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
@@ -28,6 +30,7 @@
             </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Skapa konto</button>
         </form>
+        </section>
     </div>
     
 </div>

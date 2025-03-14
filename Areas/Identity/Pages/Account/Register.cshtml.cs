@@ -74,8 +74,8 @@ namespace NetProjektNews.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "Du måste ange en e-postadress")]
+            [EmailAddress(ErrorMessage = "Ogiltig e-postadress")]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
@@ -83,8 +83,8 @@ namespace NetProjektNews.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = "Du måste ange ett lösenord")]
+            [StringLength(100, ErrorMessage = "Lösenordet måste vara minst {2} tecken långt, innehålla minst en siffra, en stor bokstav samt ett icke alfanumeriskt tecken", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
@@ -95,7 +95,7 @@ namespace NetProjektNews.Areas.Identity.Pages.Account
             /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Compare("Password", ErrorMessage = "Lösenorden matchar inte, vänligen försök igen.")]
             public string ConfirmPassword { get; set; }
         }
 

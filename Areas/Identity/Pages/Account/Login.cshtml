@@ -30,11 +30,11 @@
                     </label>
                 </div>
                 <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Logga in</button>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-primary"><i class="bi bi-arrow-right-circle"></i> Logga in</button>
                 </div>
                 <div>
                     <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Bli medlem</a>
+                        <a class="w-100 btn btn-warning mt-2" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl"><i class="bi bi-person-add"></i> Bli medlem</a>
                     </p>
                 </div>
             </form>

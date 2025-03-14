@@ -64,7 +64,7 @@ namespace NetProjektNews.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Felaktig e-postadress")]
             [EmailAddress]
             public string Email { get; set; }
 
@@ -72,7 +72,7 @@ namespace NetProjektNews.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Felaktigt lösenord")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
@@ -80,7 +80,7 @@ namespace NetProjektNews.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Kom ihåg mig?")]
             public bool RememberMe { get; set; }
         }
 
