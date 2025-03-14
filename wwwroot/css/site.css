@@ -10,8 +10,7 @@ main {
 }
 
 h1 {
-  margin-top: 10px;
-  margin-left: 10px;
+  margin-top: 15px;
 }
 
 /* Myhetsartiklar */
@@ -27,13 +26,12 @@ h1 {
 }
 
 .news-article h2 {
-  font-size: 1.8rem;
+  font-size: 2.2rem;
   margin-bottom: 10px;
   color: #333;
 }
 
 .news-article p {
-  font-size: 1rem;
   color: #555;
   text-align: center;
 }
@@ -54,11 +52,73 @@ h1 {
 .news-article a {
   display: inline-block;
   margin-right: 10px;
-  color: #007bff;
   text-decoration: none;
+}
+
+/* Hantera-inlägg-knappar */
+.button-group {
+  display: flex;
+  gap: 10px; 
+}
+
+/* Dropwown för att sortera nyheter per kategori */
+.cateForm {
+  display: flex;
+  align-items: center;
+  gap: 10px; 
+  margin: 20px 0;
+}
+
+.cateForm label {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.cateForm select {
+  padding: 8px 12px;
+  border: 2px solid #E1688B;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+}
+
+.cateForm select:hover {
+  border-color: #d4436c; 
+}
+
+.cateForm select:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 0, 242, 0.5); 
+}
+
+/* Skriva nyhet-sida */
+.form-container {
+  width: 100%;
+  max-width: 900px; 
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+  border: 2px solid #5b1d6e; 
+}
+
+.form-container label {
+  margin-top: 15px;
+  margin-bottom: 5px;
+  font-size: 18px;
   font-weight: bold;
 }
 
+.form-container input, .form-container textarea, .form-container select {
+  border: 1px solid #78318d;
+}
+
+
+.form-container .btn {
+  border: none;
+}
 /* Logga in-sida */
 .loginForm {
   max-width: 500px;
@@ -81,3 +141,33 @@ footer {
 }
 
 /* Media queries */
+@media (max-width: 800px) {
+  /* flytta text ovanför dropdown och bredda dropdown lista */
+  .cateForm {
+    flex-direction: column; 
+    align-items: flex-start; 
+  }
+
+  .cateForm label {
+    font-size: 1rem;
+    margin-bottom: 5px; 
+  }
+
+  .cateForm select {
+    width: 100%; 
+  }
+  /* centrera knapparna och lägg på rad */
+  .btn-group {
+    flex-direction: column;
+    align-items: stretch; 
+  }
+
+  .btn-group a {
+    width: 100%; 
+    text-align: center; 
+  }
+
+  .form-container .btn {
+   width: 100%;
+  }
+}

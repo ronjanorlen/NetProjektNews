@@ -28,7 +28,7 @@ namespace NetProjektNews.Controllers
         }
 
         // GET: Article
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? categoryId)
         {
             // Kontrollera om context är null 
             if (_context.Articles == null)
@@ -37,11 +37,24 @@ namespace NetProjektNews.Controllers
                 return NotFound();
             }
 
-            // Visa nyheter med nyaste överst
-            var applicationDbContext = _context.Articles
+            // Hämta kategorier 
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+            ViewBag.SelectedCategory = categoryId;
+
+            // Visa nyheter med nyaste överst 
+            var articles = _context.Articles
             .Include(a => a.Category)
-            .OrderByDescending(a => a.CreatedAt);
-            return View(await applicationDbContext.ToListAsync());
+            .OrderByDescending(a => a.CreatedAt)
+            .AsQueryable();
+
+            
+
+            // Filtrera nyheter om kategori är vald 
+            if (categoryId.HasValue) {
+                articles = articles.Where(a => a.CategoryId == categoryId);
+            }
+
+            return View(await articles.ToListAsync());
         }
 
         // GET: Article/Details/5

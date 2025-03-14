@@ -8,39 +8,65 @@
 }
 
 <h1>Senaste nytt</h1>
+<!-- Visa knapp om admin eller editor är inloggad -->
 @if (SignInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Editor")))
 {
-<p>
-    <a asp-action="Create"><i class="bi bi-plus-circle"></i> Skapa nytt inlägg</a>
-</p>
+    <p>
+        <a class="btn btn-secondary mt-2 mb-3" asp-action="Create"><i class="bi bi-plus-circle"></i> Skapa nyhet</a>
+    </p>
 }
-
-
-@foreach (var item in Model)
-{
-    <section class="news-article">
-        <h2>@item.Title</h2>
-        
-         @if (SignInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Editor")))
-    { // Visa bara om editor eller admin är inloggad 
-        <p>
-            <a asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i> Redigera</a> 
-            <a asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-info-circle"></i> Detaljer</a> 
-            <a asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i> Ta bort</a>
-        </p>
-        }
-
-        
-        <p><em>@item.CreatedAt.ToString("yyyy-MM-dd")</em></p>
-        <p><strong>Kategori:</strong> @(item.Category?.CategoryName ?? "Inte valt")</p>
-        
-        @if (!string.IsNullOrEmpty(item.ImageName))
+<!-- Dropdown för att sortera nyheter på kategori -->
+<form method="get" asp-action="Index" class="cateForm">
+    <label for="categoryFilter">Visa nyheter i kategori:</label>
+    <select id="categoryFilter" name="categoryId" onchange="this.form.submit()">
+        <option value="">Alla kategorier</option>
+        @foreach (var category in ViewBag.Categories)
         {
-            <a href="images/@item.ImageName">
-                <img src="images/thumb_@item.ImageName" alt="Bild">
-            </a>
+            <option value="@category.Id" selected="@(ViewBag.SelectedCategory == category.Id ? "selected" : null)">
+                @category.CategoryName
+            </option>
         }
+    </select>
+</form>
 
-        <p class="contentText">@item.Content</p>
-    </section>
+@if (!Model.Any())
+{ // om kategorin inte har några nyheter 
+    <p>Det finns inga nyheter i denna kategori ännu</p>
+}
+else
+{
+
+    @foreach (var item in Model)
+    {
+        <section class="news-article">
+            <h2>@item.Title</h2>
+
+            @if (SignInManager.IsSignedIn(User) && (User.IsInRole("Admin") || User.IsInRole("Editor")))
+            { // Visa bara om editor eller admin är inloggad
+             
+                 <div class="btn-group">
+                      <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.Id"><i
+                              class="bi bi-pencil-square"></i> Redigera</a>
+                      <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.Id"><i
+                              class="bi bi-info-circle"></i> Detaljer</a>
+                      <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i> Ta
+                          bort</a>
+                </div>
+            
+            }
+
+
+            <p class="mt-3"><em>@item.CreatedAt.ToString("yyyy-MM-dd")</em></p>
+            <p><strong>Kategori:</strong> @(item.Category?.CategoryName ?? "Inte valt")</p>
+
+            @if (!string.IsNullOrEmpty(item.ImageName))
+            {
+                <a href="images/@item.ImageName">
+                    <img src="images/thumb_@item.ImageName" alt="Bild">
+                </a>
+            }
+
+            <p class="contentText">@item.Content</p>
+        </section>
+    }
 }

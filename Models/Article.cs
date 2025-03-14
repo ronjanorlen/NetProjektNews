@@ -26,6 +26,7 @@ namespace NetProjektNews.Models {
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         // Bild 
+        [Display(Name = "Bild")]
         public string? ImageName { get; set; } // Lagra i databasen 
 
         // Filnamn
@@ -38,6 +39,7 @@ namespace NetProjektNews.Models {
         public int? CategoryId { get; set; }
 
         // Kategori på nyhet 
+        [Display(Name = "Kategori")]
         public Category? Category { get; set; }
     }
 }
