@@ -53,6 +53,7 @@ namespace NetProjektNews.Controllers
             }
 
             var category = await _context.Categories
+            .Include(c => c.Articles) // Hämta tillhörande nyheter 
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
@@ -77,6 +78,14 @@ namespace NetProjektNews.Controllers
         [Authorize(Roles = "Admin, Editor")] // Bara admin och editor har tillgång
         public async Task<IActionResult> Create([Bind("Id,CategoryName")] Category category)
         {
+            // Kontrollera om kategori redan finns 
+            if (_context.Categories.Any(c => c.CategoryName == category.CategoryName))
+            {
+                // Isåfall skriv ut felmeddelande 
+                ModelState.AddModelError("CategoryName", "Det finns redan en kategori med detta namn");
+                return View(category);
+            }
+            // Annars lägg till ny kategori 
             if (ModelState.IsValid)
             {
                 _context.Add(category);
@@ -163,6 +172,7 @@ namespace NetProjektNews.Controllers
             }
 
             var category = await _context.Categories
+                .Include(c => c.Articles) // Hämta tillhörande nyheter
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
@@ -178,13 +188,26 @@ namespace NetProjektNews.Controllers
         [Authorize(Roles = "Admin")] // Bara admin har tillgång
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category != null)
+            var category = await _context.Categories
+                .Include(c => c.Articles) // Hämta tillhörande nyheter
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (category == null)
             {
-                _context.Categories.Remove(category);
+                return NotFound();
             }
 
+            // Kontrollera om kategori har nyheter kopplat till sig 
+            if (category.Articles != null && category.Articles.Any())
+            { // Om ja, förhindra borttagning och skriv ut felmeddelande 
+                TempData["ErrorMessage"] = "Du kan inte ta bort en kategori som har nyheter i sig";
+                return RedirectToAction(nameof(Delete), new { id = category.Id });
+            }
+
+            // annars ta bort kategorin  
+            _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 

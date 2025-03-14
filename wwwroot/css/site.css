@@ -119,6 +119,13 @@ h1 {
 .form-container .btn {
   border: none;
 }
+
+/* Redigera kategori-sida */
+.editCatForm label {
+margin-bottom: 10px;
+font-weight: bold;
+}
+
 /* Logga in-sida */
 .loginForm {
   max-width: 500px;

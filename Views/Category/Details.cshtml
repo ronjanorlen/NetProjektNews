@@ -4,21 +4,29 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Detaljer</h1>
 
 <div>
-    <h4>Category</h4>
+    <h4>Kategori: @Html.DisplayFor(model => model.CategoryName)</h4>
+    <div>
+    <a class="btn btn-primary mt-3" asp-action="Index"><i class="bi bi-arrow-left"></i> Tillbaka till kategorier</a>
+    <a class="btn btn-warning mt-3" asp-action="Edit" asp-route-id="@Model?.Id"><i class="bi bi-pencil-square"></i> Redigera kategori</a> 
+</div>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CategoryName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CategoryName)
-        </dd>
-    </dl>
+       <!-- Loopa igenom nyheter som finns i kategori -->
+    <h4>Nyheter i denna kategori:</h4>
+    @if (Model?.Articles != null && Model.Articles.Any())
+    {
+        <ul>
+            @foreach (var article in Model.Articles)
+            {
+                <li>@article.Title</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>Denna kategori har inga nyheter</p>
+    }
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+

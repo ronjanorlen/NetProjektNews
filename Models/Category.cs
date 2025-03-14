@@ -6,7 +6,7 @@ namespace NetProjektNews.Models {
         public int Id { get; set; }
 
         // Kategorinamn 
-        [Required(ErrorMessage = "Du kan inte lägga till en kategori utan namn")]
+        [Required(ErrorMessage = "Du måste ange ett namn på kategorin")]
         [Display(Name = "Kategori")]
         public string? CategoryName { get; set; }
 

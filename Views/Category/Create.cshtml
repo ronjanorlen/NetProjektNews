@@ -1,16 +1,17 @@
 @model NetProjektNews.Models.Category
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Skapa kategori";
 }
 
-<h1>Create</h1>
-
-<h4>Category</h4>
+<h1>Lägg till ny kategori</h1>
+<div>
+    <a class="btn btn-primary mt-2 mb-3" asp-action="Index"><i class="bi bi-arrow-left"></i> Tillbaka</a>
+</div>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form class="editCatForm" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="CategoryName" class="control-label"></label>
@@ -18,15 +19,13 @@
                 <span asp-validation-for="CategoryName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Lägg till" class="btn btn-success mt-3" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
