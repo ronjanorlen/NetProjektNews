@@ -33,10 +33,11 @@ public class HomeController : Controller
             return NotFound();
         }
 
-        // Visa artiklar som ligger i kategori "Medlemmar"
+        // Visa artiklar som ligger i kategori "Medlemmar", nyaste överst
         var articles = await _context.Articles 
         .Include(a => a.Category)
         .Where(a => a.Category != null && a.Category.CategoryName == "Medlemmar")
+        .OrderByDescending(a => a.CreatedAt)
         .ToListAsync();
 
 

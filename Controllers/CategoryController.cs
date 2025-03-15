@@ -12,7 +12,7 @@ using NetProjektNews.Models;
 
 namespace NetProjektNews.Controllers
 {
-    [Authorize(Roles = "Admin, editor")] // Skyddad - måste vara inloggad för åtkomst
+    [Authorize(Roles = "Admin, Editor")] // Skyddad - måste vara inloggad för åtkomst
     public class CategoryController : Controller
     {
         private readonly ApplicationDbContext _context;

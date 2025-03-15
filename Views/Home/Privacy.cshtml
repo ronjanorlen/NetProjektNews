@@ -6,30 +6,51 @@
 
 <h1>Välkommen!</h1>
 
-<section class="member">
-    <p>Du ser denna sida för att du är inloggad som en medlem.</p>
+<section class="news-article">
+    <p class="contentText">Som medlem i Titz N Trix får du bland annat tillgång till rabatter och andra förmåner hos
+        våra samarbetspartners,
+        har förtur på våra evenemang samt möjlighet att träffa och lära känna nya kompisar med liknande intressen som du
+        själv!
+    </p>
+    <h4>Rabatter & förmåner:</h4>
+    <ul>
+        <li>20% på skidslip hos Skidmästarna</li>
+        <li>15% rabatt vid köp av skid- och snowboardutrustning hos Nelson</li>
+        <li>Gratis eller rabatterat inträde till event, tävlingar och afterski-evenmang</li>
+        <li>Förtur till nya releaser</li>
+        <li>..och mycket mer!</li>
+    </ul>
 
-
-    @if (!Model.Any())
-    {
-        <p>Det finns inga medlemsartiklar just nu.</p>
-    }
-    else
-    {
-        @foreach (var article in Model)
-        {
-            <section class="member-info">
-                <h2>@article.Title</h2>
-
-                <p class="mt-3"><em>@article.CreatedAt.ToString("yyyy-MM-dd")</em></p>
-                @if (!string.IsNullOrEmpty(article.ImageName))
-                {
-                    <a href="images/@article.ImageName">
-                        <img src="~/images/@article.ImageName" alt="Bild">
-                    </a>
-                }
-                <p class="contentText">@article.Content</p>
-            </section>
-        }
-    }
+    <p class="contentText">
+        <strong>Medlems-sidan uppdateras regelbundet med nyheter och information så se till att kika in nu och då för
+            att inte missa något!</strong>
+        <br />
+        Har du några frågor eller funderingar är det bara att slänga iväg ett mail till titzntrix@epostadress.com <i
+            class="bi bi-emoji-smile"></i>
+    </p>
 </section>
+
+
+
+@if (!Model.Any())
+{
+    <p>Här var det tomt.. <i class="bi bi-emoji-frown"></i></p>
+}
+else
+{
+    @foreach (var article in Model)
+    {
+        <section class="news-article">
+            <h2>@article.Title</h2>
+
+            <p class="mt-3"><em>@article.CreatedAt.ToString("yyyy-MM-dd")</em></p>
+            @if (!string.IsNullOrEmpty(article.ImageName))
+            {
+                <a href="images/@article.ImageName">
+                    <img src="~/images/thumb_@article.ImageName" alt="Bild">
+                </a>
+            }
+            <p class="contentText">@article.Content</p>
+        </section>
+    }
+}
