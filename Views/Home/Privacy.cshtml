@@ -1,6 +1,35 @@
-﻿@{
-    ViewData["Title"] = "Medlemmar";
+﻿@model IEnumerable<NetProjektNews.Models.Article>
+
+@{
+    ViewData["Title"] = "Medlem";
 }
+
 <h1>Välkommen!</h1>
 
-<p>Du ser denna sida för Du är inloggad som en medlem.</p>
+<section class="member">
+    <p>Du ser denna sida för att du är inloggad som en medlem.</p>
+
+
+    @if (!Model.Any())
+    {
+        <p>Det finns inga medlemsartiklar just nu.</p>
+    }
+    else
+    {
+        @foreach (var article in Model)
+        {
+            <section class="member-info">
+                <h2>@article.Title</h2>
+
+                <p class="mt-3"><em>@article.CreatedAt.ToString("yyyy-MM-dd")</em></p>
+                @if (!string.IsNullOrEmpty(article.ImageName))
+                {
+                    <a href="images/@article.ImageName">
+                        <img src="~/images/@article.ImageName" alt="Bild">
+                    </a>
+                }
+                <p class="contentText">@article.Content</p>
+            </section>
+        }
+    }
+</section>

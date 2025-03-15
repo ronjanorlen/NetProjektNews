@@ -138,6 +138,37 @@ font-weight: bold;
 
 /* Registrera konto-sida */
 
+/* Medlems-sida */
+.member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.member h2 {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.member p {
+  color: #555;
+  text-align: center;
+}
+
+.news-article img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 10px auto;
+  border-radius: 5px;
+ 
+}
 
 /* Footer */
 footer {
