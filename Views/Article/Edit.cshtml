@@ -12,7 +12,7 @@
 <hr />
 <div class="d-flex justify-content-center">
     <div class="form-container">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -20,7 +20,7 @@
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
-               <div class="form-group">
+            <div class="form-group">
                 <label asp-for="Content" class="control-label"></label>
                 <textarea asp-for="Content" class="form-control" rows="10"></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
@@ -30,11 +30,21 @@
                 <input asp-for="CreatedAt" class="form-control" />
                 <span asp-validation-for="CreatedAt" class="text-danger"></span>
             </div>
-           <div class="form-group">
-                <label asp-for="ImageFile" class="control-label"></label>
+
+            @if (!string.IsNullOrEmpty(Model.ImageName))
+            {
+                <div class="form-group">
+                    <label>Bild:</label>
+                    <br />
+                    <img src="~/images/@Model.ImageName" alt="" />
+                </div>
+            }
+            <div class="form-group">
+                <label asp-for="ImageFile" class="control-label">Ladda upp bild:</label>
                 <input asp-for="ImageFile" class="form-control" accept="image/*" />
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
                 <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
@@ -50,5 +60,7 @@
 
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

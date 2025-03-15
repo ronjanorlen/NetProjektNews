@@ -69,9 +69,7 @@
 
                 @if (!string.IsNullOrEmpty(item.ImageName))
                 {
-                    <a href="images/@item.ImageName">
-                        <img src="images/thumb_@item.ImageName" alt="Bild">
-                    </a>
+                        <img src="images/thumb_@item.ImageName" alt="">
                 }
 
                 <p class="contentText">@item.Content</p>

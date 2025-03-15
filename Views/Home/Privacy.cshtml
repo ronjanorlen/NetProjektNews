@@ -18,6 +18,7 @@
         <li>15% rabatt vid köp av skid- och snowboardutrustning hos Nelson</li>
         <li>Gratis eller rabatterat inträde till event, tävlingar och afterski-evenmang</li>
         <li>Förtur till nya releaser</li>
+        <li>Halva priset på cykelservice hos Cykelverkstan</li>
         <li>..och mycket mer!</li>
     </ul>
 
@@ -46,9 +47,7 @@ else
             <p class="mt-3"><em>@article.CreatedAt.ToString("yyyy-MM-dd")</em></p>
             @if (!string.IsNullOrEmpty(article.ImageName))
             {
-                <a href="images/@article.ImageName">
-                    <img src="~/images/thumb_@article.ImageName" alt="Bild">
-                </a>
+                    <img src="~/images/thumb_@article.ImageName" alt="">
             }
             <p class="contentText">@article.Content</p>
         </section>

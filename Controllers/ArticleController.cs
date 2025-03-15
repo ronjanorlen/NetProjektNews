@@ -47,10 +47,11 @@ namespace NetProjektNews.Controllers
             .OrderByDescending(a => a.CreatedAt)
             .AsQueryable();
 
-            
+
 
             // Filtrera nyheter om kategori är vald 
-            if (categoryId.HasValue) {
+            if (categoryId.HasValue)
+            {
                 articles = articles.Where(a => a.CategoryId == categoryId);
             }
 
@@ -126,7 +127,7 @@ namespace NetProjektNews.Controllers
                 }
                 else
                 {
-                    article.ImageName = "placeholder.jpg"; // Om det inte finns någon bild, använd placeholder-bild 
+                    article.ImageName = null; // Om det inte finns någon bild
                 }
 
                 _context.Add(article);
@@ -172,7 +173,7 @@ namespace NetProjektNews.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin, Editor")] // Admin och editor har tillgång
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,CreatedAt,ImageName,CategoryId")] Article article)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content,CreatedAt,ImageName,ImageFile,CategoryId")] Article article)
         {
             if (id != article.Id)
             {
@@ -182,7 +183,43 @@ namespace NetProjektNews.Controllers
             if (ModelState.IsValid)
             {
                 try
-                {
+                { // Hämta befintlig nyhet 
+                    var existingArticle = await _context.Articles.AsNoTracking().FirstOrDefaultAsync(a => a.Id == id);
+                    if (existingArticle == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Spara createdBy 
+                    article.CreatedBy = existingArticle.CreatedBy;
+
+                    // Hantera uppladdning av ev ny bild
+                    if (article.ImageFile != null)
+                    {
+                        string fileName = Path.GetFileNameWithoutExtension(article.ImageFile.FileName);
+                        string extension = Path.GetExtension(article.ImageFile.FileName);
+                        fileName = fileName.Replace(" ", String.Empty) + DateTime.Now.ToString("yymmssfff") + extension;
+                        string path = Path.Combine(wwwRootPath + "/images", fileName);
+
+                        // Spara bild i filsystem 
+                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            await article.ImageFile.CopyToAsync(fileStream);
+                        }
+
+                        // Skapa miniatyrbild 
+                        CreateImageFiles(fileName);
+
+                        // Sätt nytt imagename 
+                        article.ImageName = fileName;
+                    }
+                  
+                    else
+                    {
+                        // Behåll bild om ingen ny laddas upp  
+                       article.ImageName = existingArticle.ImageName;
+                    }
+
                     _context.Update(article);
                     await _context.SaveChangesAsync();
                 }
