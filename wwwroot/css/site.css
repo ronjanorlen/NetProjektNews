@@ -140,6 +140,12 @@ h1 {
   border: none;
 }
 
+/*Redigera nyhet-bild*/
+img.editImage {
+  max-width: 100%;
+  height: auto;
+}
+
 /* Redigera kategori-sida */
 .editCatForm label {
 margin-bottom: 10px;
